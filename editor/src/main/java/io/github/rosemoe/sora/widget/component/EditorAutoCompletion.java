@@ -52,6 +52,7 @@ import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
  */
 public class EditorAutoCompletion extends EditorPopupWindow implements EditorBuiltinComponent {
 
+    private final static long SHOW_PROGRESS_BAR_DELAY = 50;
     private final CodeEditor editor;
     protected boolean cancelShowUp = false;
     protected long requestTime;
@@ -65,6 +66,7 @@ public class EditorAutoCompletion extends EditorPopupWindow implements EditorBui
     private long requestShow = 0;
     private long requestHide = -1;
     private boolean enabled = true;
+    private boolean loading = false;
 
     /**
      * Create a panel instance for the given editor
@@ -100,6 +102,15 @@ public class EditorAutoCompletion extends EditorPopupWindow implements EditorBui
         if (!enabled) {
             hide();
         }
+    }
+
+    /**
+     * Some layout may support to display more animations,
+     * this method provides control over the animation of the layout。
+     * @see CompletionLayout#setEnabledAnimation(boolean)
+     */
+    public void setEnabledAnimation(boolean enabledAnimation) {
+        layout.setEnabledAnimation(enabledAnimation);
     }
 
     @SuppressWarnings("unchecked")
@@ -154,7 +165,17 @@ public class EditorAutoCompletion extends EditorPopupWindow implements EditorBui
      * @param state Whether loading
      */
     public void setLoading(boolean state) {
-        layout.setLoading(state);
+        loading = state;
+        if (state) {
+            editor.postDelayed(() -> {
+                if (loading) {
+                    layout.setLoading(true);
+                }
+            }, SHOW_PROGRESS_BAR_DELAY);
+        } else {
+            layout.setLoading(false);
+        }
+
     }
 
     /**
@@ -287,6 +308,10 @@ public class EditorAutoCompletion extends EditorPopupWindow implements EditorBui
                 adapter.notifyDataSetChanged();
             }
             float newHeight = adapter.getItemHeight() * adapter.getCount();
+            if (newHeight == 0) {
+                hide();
+            }
+            editor.updateCompletionWindowPosition();
             setSize(getWidth(), (int) Math.min(newHeight, maxHeight));
             if (!isShowing()) {
                 show();

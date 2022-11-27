@@ -22,38 +22,46 @@
  *     additional information or have any questions
  ******************************************************************************/
 
-plugins {
-    id("com.android.library")
-    id("com.vanniktech.maven.publish.base")
-    id("kotlin-android")
-}
+package io.github.rosemoe.sora.lang.completion
 
-group = "io.github.Rosemoe.sora-editor"
-version = Versions.versionName
 
-android {
-    namespace = "io.github.rosemoe.sora.ts"
+/**
+ * Completion item kinds.
+ */
+enum class CompletionItemKind(
+    val value: Int,
+    val defaultDisplayBackgroundColor: Long = 0,
+) {
+    Identifier(0, 0xffabb6bd),
+    Text(0, 0xffabb6bd),
+    Method(1, 0xfff4b2be),
+    Function(2, 0xfff4b2be),
+    Constructor(3, 0xfff4b2be),
+    Field(4, 0xfff1c883),
+    Variable(5, 0xfff1c883),
+    Class(6, 0xff85cce5),
+    Interface(7, 0xff99cb87),
+    Module(8, 0xff85cce5),
+    Property(9, 0xffcebcf4),
+    Unit(10),
+    Value(11, 0xfff1c883),
+    Enum(12, 0xff85cce5),
+    Keyword(13, 0xffcc7832),
+    Snippet(14),
+    Color(15, 0xfff4b2be),
+    Reference(17),
+    File(16),
+    Folder(18),
+    EnumMember(19),
+    Constant(20, 0xfff1c883),
+    Struct(21, 0xffcebcf4),
+    Event(22),
+    Operator(23, 0xffeaabb6),
+    TypeParameter(24, 0xfff1c883),
+    User(25),
+    Issue(26);
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
+    private val displayString = name[0].toString()
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-}
-
-dependencies {
-    compileOnly(projects.editor)
-    api("io.github.itsaky:android-tree-sitter:1.0.3")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    fun getDisplayChar(): String = displayString
 }

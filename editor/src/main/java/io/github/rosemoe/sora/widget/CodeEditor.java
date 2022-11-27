@@ -1369,6 +1369,9 @@ public class CodeEditor extends View implements ContentListener, Formatter.Forma
                 return;
             }
             var res = editorSearcher.lastResults;
+            if (res == null) {
+                return;
+            }
             var lineLeft = text.getCharIndex(line, 0);
             var lineRight = lineLeft + text.getColumnCount(line);
             for (int i = 0; i < res.size(); i++) {
@@ -1631,7 +1634,7 @@ public class CodeEditor extends View implements ContentListener, Formatter.Forma
         return StringsKt.repeat(" ", getTabWidth());
     }
 
-    protected void updateCompletionWindowPosition() {
+    public void updateCompletionWindowPosition() {
         updateCompletionWindowPosition(true);
     }
 
@@ -1664,12 +1667,9 @@ public class CodeEditor extends View implements ContentListener, Formatter.Forma
             width = (int) Math.min(300 * dpUnit, getWidth() / 2f);
         }
         int height = completionWindow.getHeight();
-        if (!completionWindow.isShowing()) {
-            height = (int) restY;
-        }
         completionWindow.setMaxHeight((int) restY);
-        completionWindow.setSize(width, height);
         completionWindow.setLocation((int) panelX + getOffsetX(), (int) panelY + getOffsetY());
+        completionWindow.setSize(width, height);
     }
 
     /**

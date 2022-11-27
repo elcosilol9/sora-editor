@@ -293,13 +293,13 @@ public class TextMateLanguage extends EmptyLanguage {
     }
 
     @Override
-    public void requireAutoComplete(@NonNull ContentReference content, @NonNull CharPosition position, @NonNull CompletionPublisher publisher, @NonNull Bundle extraArguments) {
+    public void requireAutoComplete(@NonNull ContentReference content, @NonNull CharPosition position, @NonNull CompletionPublisher publisher, @NonNull Bundle extraArguments)  {
         if (!autoCompleteEnabled) {
             return;
         }
         var prefix = CompletionHelper.computePrefix(content, position, MyCharacter::isJavaIdentifierPart);
         final var idt = textMateAnalyzer.syncIdentifiers;
-        autoComplete.requireAutoComplete(prefix, publisher, idt);
+        autoComplete.requireAutoComplete(content, position, prefix, publisher, idt);
     }
 
     public IdentifierAutoComplete getAutoCompleter() {

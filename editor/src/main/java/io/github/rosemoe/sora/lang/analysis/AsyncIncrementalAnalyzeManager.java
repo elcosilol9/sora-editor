@@ -98,7 +98,7 @@ public abstract class AsyncIncrementalAnalyzeManager<S, T> implements Incrementa
     }
 
     @Override
-    public void insert(CharPosition start, CharPosition end, CharSequence insertedText) {
+    public void insert(@NonNull CharPosition start, @NonNull CharPosition end, @NonNull CharSequence insertedText) {
         if (thread != null) {
             increaseRunCount();
             thread.handler.sendMessage(thread.handler.obtainMessage(MSG_MOD, new TextModification(IntPair.pack(start.line, start.column), IntPair.pack(end.line, end.column), insertedText)));
@@ -106,7 +106,7 @@ public abstract class AsyncIncrementalAnalyzeManager<S, T> implements Incrementa
     }
 
     @Override
-    public void delete(CharPosition start, CharPosition end, CharSequence deletedText) {
+    public void delete(@NonNull CharPosition start, @NonNull CharPosition end, @NonNull CharSequence deletedText) {
         if (thread != null) {
             increaseRunCount();
             thread.handler.sendMessage(thread.handler.obtainMessage(MSG_MOD, new TextModification(IntPair.pack(start.line, start.column), IntPair.pack(end.line, end.column), null)));
@@ -277,12 +277,7 @@ public abstract class AsyncIncrementalAnalyzeManager<S, T> implements Incrementa
             private Line line;
 
             public void moveToLine(int line) {
-                if (line < 0) {
-                    if (this.line != null) {
-                        this.line.lock.unlock();
-                    }
-                    this.line = null;
-                } else if (line >= lines.size()) {
+                if (line < 0 || line >= lines.size()) {
                     if (this.line != null) {
                         this.line.lock.unlock();
                     }
@@ -296,6 +291,7 @@ public abstract class AsyncIncrementalAnalyzeManager<S, T> implements Incrementa
                         locked = lock.tryLock(100, TimeUnit.MICROSECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                     if (locked) {
                         try {

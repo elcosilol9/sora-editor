@@ -43,7 +43,6 @@ import io.github.rosemoe.sora.widget.CodeEditor;
  */
 public class SimpleCompletionItem extends CompletionItem {
 
-    public int prefixLength;
     public String commitText;
 
     public SimpleCompletionItem(int prefixLength, String commitText) {
@@ -79,6 +78,15 @@ public class SimpleCompletionItem extends CompletionItem {
     @Override
     public SimpleCompletionItem label(CharSequence label) {
         super.label(label);
+        return this;
+    }
+
+    @Override
+    public SimpleCompletionItem kind(CompletionItemKind kind) {
+        super.kind(kind);
+        if (this.icon == null) {
+            icon = SimpleCompletionIconDrawer.draw(kind);
+        }
         return this;
     }
 
