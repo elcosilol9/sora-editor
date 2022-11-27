@@ -1,0 +1,16 @@
+
+<resources>
+
+    <string name="last">Anterior</string>
+    <string name="next">Siguiente</string>
+    <string name="replace">Reemplazar</string>
+    <string name="replaceAll">Reemplazar todo</string>
+    <string name="replacement">Reemplazo</string>
+    <string name="text_to_search">Texto para buscar</string>
+    <string name="editor_search_replacing">Reemplazando texto…</string>
+    <string name="editor_search_busy">El editor se esta preparando…</string>
+    <string name="editor_line_number_tip_prefix" translatable="false">Line:</string>
+    <string name="editor_formatting">Formateando tu código…</string>
+    <string name="more">Más</string>
+
+</resources>
